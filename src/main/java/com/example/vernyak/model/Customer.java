@@ -1,5 +1,6 @@
 package com.example.vernyak.model;
 
+import com.example.vernyak.service.CustomerService;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,7 +9,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "customer") // Якщо ім'я таблиці відрізняється, змініть його тут
+@Table(name = "customer_table") // Якщо ім'я таблиці відрізняється, змініть його тут
 public class Customer {
 
     @Id
@@ -54,7 +55,7 @@ public class Customer {
         return updated;
     }
 
-    public void setUpdated(Long updated) {
+    public void setUpdated(CustomerService.DateFormatter updated) {
         this.updated = updated;
     }
 

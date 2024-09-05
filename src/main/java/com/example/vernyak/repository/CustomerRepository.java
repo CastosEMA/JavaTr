@@ -12,8 +12,6 @@ public interface CustomerRepository extends CrudRepository<Customer,String> {
         return null;
     }
 
-    Customer findById(int id);
-    void deleteById(int id);
 
 
 }
