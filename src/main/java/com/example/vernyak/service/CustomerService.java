@@ -5,7 +5,6 @@ import com.example.vernyak.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,27 +13,24 @@ import java.util.stream.Collectors;
 @Service
 public class CustomerService implements ICustomerService {
 
-    public class DateFormatter {
+    public static Long generateFormattedDate() {
+        LocalDateTime now = LocalDateTime.now();
 
-        public static String generateFormattedDate() {
-            LocalDateTime now = LocalDateTime.now();
+        // Отримуємо компоненти дати і часу
+        int hour = now.getHour();
+        int day = now.getDayOfMonth();
+        int month = now.getMonthValue();
+        int year = now.getYear() % 100; // Останні дві цифри року
 
-            // Отримуємо компоненти дати і часу
-            int hour = now.getHour();
-            int day = now.getDayOfMonth();
-            int month = now.getMonthValue();
-            int year = now.getYear() % 100; // Останні дві цифри року
+        // Форматуємо кожен компонент до двозначного числа
+        String formattedHour = String.format("%02d", hour);
+        String formattedDay = String.format("%02d", day);
+        String formattedMonth = String.format("%02d", month);
+        String formattedYear = String.format("%02d", year);
 
-            // Форматуємо кожен компонент до двозначного числа
-            String formattedHour = String.format("%02d", hour);
-            String formattedDay = String.format("%02d", day);
-            String formattedMonth = String.format("%02d", month);
-            String formattedYear = String.format("%02d", year);
-
-            // Складаємо фінальний рядок
-            return formattedHour + formattedDay + formattedMonth + formattedYear;
-        }
-}
+        // Складаємо фінальний рядок
+        return Long.valueOf(formattedHour + formattedDay + formattedMonth + formattedYear);
+    }
 
         @Autowired
     private CustomerRepository customerRepository;
@@ -65,7 +61,7 @@ public class CustomerService implements ICustomerService {
             customer.setFullName(fullName); // Оновлення імені клієнта
             customer.setEmail(email);       // Оновлення email
             customer.setPhone(phone);       // Оновлення телефону
-            customer.setUpdated(new DateFormatter());
+            customer.setUpdated(generateFormattedDate());
 
             // Збереження зміненого клієнта в базі даних
             return customerRepository.save(customer);
@@ -94,13 +90,18 @@ public class CustomerService implements ICustomerService {
 
     private Map<String, Object> getStringObjectMap(Customer customer) {
         Map<String, Object> result = new HashMap<>();
-        result.put("id", customer.getId());
-        result.put("fullName", customer.getFullName());
-        result.put("email", customer.getEmail());
-        result.put("phone", customer.getPhone());
+
+        if (customer.getIsActive()==Boolean.FALSE){return null;}
+        else {
+            result.put("id", customer.getId());
+            result.put("fullName", customer.getFullName());
+            result.put("email", customer.getEmail());
+            result.put("phone", customer.getPhone());
 
 
-        return result;
+            return result;
+        }
+
     }
 
     @Override
@@ -115,4 +116,8 @@ public class CustomerService implements ICustomerService {
     }
 
 
+    public void saveCustomer(Customer customer) {
+        customerRepository.save(customer);
+
+    }
 }

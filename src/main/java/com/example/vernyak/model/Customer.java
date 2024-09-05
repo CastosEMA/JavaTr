@@ -55,7 +55,7 @@ public class Customer {
         return updated;
     }
 
-    public void setUpdated(CustomerService.DateFormatter updated) {
+    public void setUpdated(Long updated) {
         this.updated = updated;
     }
 
