@@ -13,14 +13,7 @@ public class CustomerService implements ICustomerService{
 
     @Override
     public String getCustomer(Customer customer){
-        List<Customer> cus = CustomerRepository.findByUsername(customer.getUserName());
-        System.out.println(cus.size());
-        if (cus != null || cus.size()>0){
-            if (cus.get(0).getPassword().equals(customer.getPassword())){
-                return "Succes";
-            }
-        }
-        return "Failed";
+    return null;
     }
 
 }
